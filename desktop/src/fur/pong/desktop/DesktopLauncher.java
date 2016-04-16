@@ -1,8 +1,8 @@
-package super.pong.desktop;
+package fur.pong.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import super.pong.SuperPongMain;
+import fur.pong.SuperPongMain;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {

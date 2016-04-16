@@ -1,4 +1,4 @@
-package super.pong;
+package fur.pong;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
