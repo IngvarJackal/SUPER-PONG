@@ -17,15 +17,16 @@ import static fur.pong.utils.Utils.revertY;
 
 
 public class MenuScene implements Scene {
-    private final SpriteBatch batch;
+    private SpriteBatch batch;
 
     private final BitmapFont whiteFont = new BitmapFont(); {whiteFont.setColor(Color.WHITE);}
     private final BitmapFont blackFont = new BitmapFont(); {blackFont.setColor(Color.BLACK);}
 
-    private final List<GlyphLayout> whiteMenuItems = Arrays.asList(new GlyphLayout(whiteFont, "Start game"), new GlyphLayout(whiteFont, "Exit"));
-    private final List<GlyphLayout> blackMenuItems = Arrays.asList(new GlyphLayout(blackFont, "Start game"), new GlyphLayout(blackFont, "Exit"));
+    private final List<GlyphLayout> whiteMenuItems = Arrays.asList(new GlyphLayout(whiteFont, "Start game"), new GlyphLayout(whiteFont, "Exit"), new GlyphLayout(whiteFont, "Exit2"));
+    private final List<GlyphLayout> blackMenuItems = Arrays.asList(new GlyphLayout(blackFont, "Start game"), new GlyphLayout(blackFont, "Exit"), new GlyphLayout(blackFont, "Exit2"));
 
-    private final List<Runnable> menuActions = Arrays.asList(() -> reutrnedScene = new GameScene(),
+    private final List<Runnable> menuActions = Arrays.asList(() -> reutrnedScene = new GameScene(batch, 0),
+                                                             () -> reutrnedScene = new ExitScene(),
                                                              () -> reutrnedScene = new ExitScene());
     private final int menuLength = whiteMenuItems.size()-1;
 
@@ -48,12 +49,12 @@ public class MenuScene implements Scene {
 
     @Override
     public Scene workAndGetScene() {
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
             selectedPosition = Math.max(selectedPosition-1, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
             selectedPosition = Math.min(selectedPosition+1, menuLength);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.ENTER) ||
-                   Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+        } else if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER) ||
+                Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             menuActions.get(selectedPosition).run();
         }
         return reutrnedScene;
