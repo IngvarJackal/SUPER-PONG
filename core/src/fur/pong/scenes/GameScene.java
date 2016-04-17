@@ -43,7 +43,7 @@ public class GameScene implements Scene {
             if (gameState.players.get(curPlayer).addyPos(8))
                 cameraShift -= 0.5;
         } else if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            if (gameState.players.get(curPlayer).addyPos(-8));
+            if (gameState.players.get(curPlayer).addyPos(-8))
                 cameraShift += 0.5;
         } else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             return new ExitScene();

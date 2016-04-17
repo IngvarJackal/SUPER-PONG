@@ -33,7 +33,6 @@ public class Player {
     public boolean addyPos(int delta) {
         int prevPos = getyPos();
         setyPos(getyPos() + delta);
-        System.out.println(prevPos + ";" + getyPos());
         return (prevPos != getyPos());
     }
 }
