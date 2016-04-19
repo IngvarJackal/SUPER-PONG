@@ -1,7 +1,7 @@
 package fur.pong.networking;
 
-import fur.pong.network.msg.Input;
-import fur.pong.network.msg.State;
+import fur.pong.common.msg.Input;
+import fur.pong.common.msg.State;
 
 import java.io.Closeable;
 import java.io.IOException;
