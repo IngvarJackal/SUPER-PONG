@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import fur.pong.SharedState;
 import fur.pong.entities.Ball;
 import fur.pong.entities.GameState;
 import fur.pong.entities.Player;
@@ -39,6 +40,11 @@ public class GameScene implements Scene {
 
     @Override
     public Scene workAndGetScene() {
+
+        if (!SharedState.settingsSet) {
+            return new ExitScene();
+        }
+
         if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
             if (gameState.players.get(curPlayer).addyPos(8))
                 cameraShift -= 0.5;
