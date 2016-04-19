@@ -39,6 +39,7 @@ public class NetworkManager implements Closeable {
     public List<State> getStates() {
         List<State> result = new ArrayList<>(inQueue.size());
         inQueue.forEach(result::add);
+        inQueue.clear();
         return result;
     }
 

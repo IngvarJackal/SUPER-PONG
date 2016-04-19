@@ -13,8 +13,7 @@ public class Networking implements Closeable {
     private final int port;
 
     public Networking(String ip, int port) throws SocketException, UnknownHostException {
-        //ipAddress = InetAddress.getByName(ip);
-        ipAddress = InetAddress.getLoopbackAddress();
+        ipAddress = Inet6Address.getByName(ip);
         this.port = port;
     }
 

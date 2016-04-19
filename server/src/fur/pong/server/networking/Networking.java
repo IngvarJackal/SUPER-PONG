@@ -9,6 +9,8 @@ import java.net.*;
 
 public class Networking implements Closeable {
     private final DatagramSocket socket;
+    private InetAddress returnAddress;
+    private int returnPort;
 
     public Networking(int port) throws SocketException, UnknownHostException {
         socket = new DatagramSocket(port);
@@ -16,7 +18,7 @@ public class Networking implements Closeable {
 
     public void sendObject(Serializable obj) throws IOException {
         byte[] data = SerializationUtils.serialize(obj);
-        socket.send(new DatagramPacket(data, data.length));
+        socket.send(new DatagramPacket(data, data.length, returnAddress, returnPort));
     }
 
     public <T> T recieveObject() {
@@ -25,6 +27,8 @@ public class Networking implements Closeable {
         DatagramPacket recievedObject = new DatagramPacket(recieve, recieve.length);
         try {
             socket.receive(recievedObject);
+            returnAddress = recievedObject.getAddress();
+            returnPort = recievedObject.getPort();
             recObj = SerializationUtils.deserialize(recievedObject.getData());
         } finally {
             return (T)recObj;
