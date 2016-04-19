@@ -1,4 +1,4 @@
-package fur.pong.network.msg;
+package fur.pong.common.msg;
 
 import java.io.Serializable;
 

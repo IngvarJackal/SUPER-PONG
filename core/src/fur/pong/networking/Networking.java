@@ -1,4 +1,4 @@
-package fur.pong.network;
+package fur.pong.networking;
 
 import org.apache.commons.lang3.SerializationUtils;
 

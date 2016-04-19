@@ -1,4 +1,4 @@
-package fur.pong.network;
+package fur.pong.networking;
 
 import fur.pong.network.msg.Input;
 import fur.pong.network.msg.State;
