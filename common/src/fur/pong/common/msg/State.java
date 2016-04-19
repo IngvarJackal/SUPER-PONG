@@ -1,5 +1,7 @@
 package fur.pong.common.msg;
 
-public class State {
+import java.io.Serializable;
+
+public class State implements Serializable {
     long serialVersionUID = 0L;
 }

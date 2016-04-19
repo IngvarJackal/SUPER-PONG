@@ -1,4 +1,4 @@
-package fur.pong.networking;
+package fur.pong.server.networking;
 
 import fur.pong.common.msg.Input;
 import fur.pong.common.msg.State;
@@ -12,15 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class NetworkManager implements Closeable {
     private final Networking networkingService;
 
-    private Queue<State> inQueue = new ConcurrentLinkedQueue<>();
+    private Queue<Input> inQueue = new ConcurrentLinkedQueue<>();
     private final Thread inThread;
 
-    public NetworkManager(String ip, String port) throws SocketException, UnknownHostException, ParseException {
-        this.networkingService = new Networking(ip, Integer.parseInt(port));
+    public NetworkManager(String port) throws SocketException, UnknownHostException, ParseException {
+        this.networkingService = new Networking(Integer.parseInt(port));
 
         inThread = new Thread(() -> {
             while (true) {
@@ -36,15 +38,15 @@ public class NetworkManager implements Closeable {
         return this;
     }
 
-    public List<State> getStates() {
-        List<State> result = new ArrayList<>(inQueue.size());
+    public List<Input> getInputs() {
+        List<Input> result = new ArrayList<>(inQueue.size());
         inQueue.forEach(result::add);
         return result;
     }
 
-    public void sendInput(Input input) {
+    public void sendState(State state) {
         try {
-            networkingService.sendObject(input);
+            networkingService.sendObject(state);
         } catch (Exception e) {
             e.printStackTrace();
         }

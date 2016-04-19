@@ -1,4 +1,4 @@
-package fur.pong.networking;
+package fur.pong.server.networking;
 
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -8,19 +8,15 @@ import java.io.Serializable;
 import java.net.*;
 
 public class Networking implements Closeable {
-    private final DatagramSocket socket = new DatagramSocket();
-    private final InetAddress ipAddress;
-    private final int port;
+    private final DatagramSocket socket;
 
-    public Networking(String ip, int port) throws SocketException, UnknownHostException {
-        //ipAddress = InetAddress.getByName(ip);
-        ipAddress = InetAddress.getLoopbackAddress();
-        this.port = port;
+    public Networking(int port) throws SocketException, UnknownHostException {
+        socket = new DatagramSocket(port);
     }
 
     public void sendObject(Serializable obj) throws IOException {
         byte[] data = SerializationUtils.serialize(obj);
-        socket.send(new DatagramPacket(data, data.length, ipAddress, port));
+        socket.send(new DatagramPacket(data, data.length));
     }
 
     public <T> T recieveObject() {

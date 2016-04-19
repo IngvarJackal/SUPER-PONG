@@ -12,7 +12,11 @@ import fur.pong.SharedState;
 import fur.pong.entities.Ball;
 import fur.pong.entities.GameState;
 import fur.pong.entities.Player;
+import fur.pong.networking.NetworkManager;
 
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.text.ParseException;
 import java.util.Arrays;
 
 public class GameScene implements Scene {
@@ -33,15 +37,33 @@ public class GameScene implements Scene {
 
     private float cameraShift = 0f;
 
+    private NetworkManager networkManager;
+
     public GameScene(SpriteBatch batch, int curPlayer) {
         this.batch = batch;
         this.curPlayer = curPlayer;
     }
 
+
+    // if returns 'true' then exit
+    private boolean lazyInit() {
+        if (networkManager == null) {
+            if (!SharedState.settingsSet) {
+                return true;
+            }
+            try {
+                networkManager = new NetworkManager(SharedState.ip, SharedState.port).start();
+            } catch (SocketException | UnknownHostException | ParseException e) {
+                e.printStackTrace();
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public Scene workAndGetScene() {
-
-        if (!SharedState.settingsSet) {
+        if (lazyInit()) {
             return new ExitScene();
         }
 
@@ -54,6 +76,10 @@ public class GameScene implements Scene {
         } else if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             return new ExitScene();
         }
+
+        System.out.println(networkManager.getStates());
+        networkManager.sendInput(new fur.pong.common.msg.Input());
+
         return this;
     }
 
