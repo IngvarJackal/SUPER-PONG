@@ -79,18 +79,4 @@ public class CircularBuffer<T> {
         b.append("]");
         return b.toString();
     }
-
-    public static void a() {
-        CircularBuffer<String> aa = new CircularBuffer<>(String.class, 10);
-        aa.array[2] = "2"; aa.array[3] = "3"; aa.array[8] = "8"; aa.array[9] = "9";
-        aa.begin = 3;
-        aa.len = 7;
-        System.out.println(aa);
-        System.out.println(aa.getNearest(2));
-        System.out.println(aa.getNearest(3));
-        System.out.println(aa.getNearest(-3));
-        aa.set("-2", -2);
-        System.out.println(aa.getNearest(-3));
-        System.out.println(aa);
-    }
 }
