@@ -12,6 +12,7 @@ task run(dependsOn: classes, type: JavaExec) {
     standardInput = System.in
     workingDir = project.assetsDir
     ignoreExitValue = true
+    jvmArgs = ["-Djava.net.preferIPv4Stack=true"]
 }
 
 task dist(type: Jar) {

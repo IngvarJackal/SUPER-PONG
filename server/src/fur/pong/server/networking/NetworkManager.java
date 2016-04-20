@@ -9,16 +9,14 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 public class NetworkManager implements Closeable {
     private final Networking networkingService;
 
-    private Queue<Input> inQueue = new ConcurrentLinkedQueue<>();
+    private final HashMap<IpPort, ConcurrentLinkedQueue<Input>> clientQueues = new HashMap<>();
     private final Thread inThread;
 
     public NetworkManager(String port) throws SocketException, UnknownHostException, ParseException {
@@ -28,7 +26,9 @@ public class NetworkManager implements Closeable {
             while (true) {
                 if (Thread.interrupted())
                     return;
-                inQueue.add(networkingService.recieveObject());
+                WrappedMsg<Input> msg = networkingService.recieveObject();
+                clientQueues.computeIfAbsent(msg.ipPort, (dontcare) -> new ConcurrentLinkedQueue<>());
+                clientQueues.get(msg.ipPort).add(msg.payload);
             }
         });
     }
@@ -38,16 +38,19 @@ public class NetworkManager implements Closeable {
         return this;
     }
 
-    public List<Input> getInputs() {
-        List<Input> result = new ArrayList<>(inQueue.size());
-        inQueue.forEach(result::add);
-        inQueue.clear();
+    public List<Input> getInputs(IpPort ipPort) {
+        ConcurrentLinkedQueue<Input> inQueue = clientQueues.get(ipPort);
+        List<Input> result = new ArrayList<>();
+        if (inQueue != null) {
+            while (!inQueue.isEmpty())
+                result.add(inQueue.poll());
+        }
         return result;
     }
 
-    public void sendState(State state) {
+    public void sendState(State state, IpPort ipPort) {
         try {
-            networkingService.sendObject(state);
+            networkingService.sendObject(state, ipPort);
         } catch (Exception e) {
             e.printStackTrace();
         }

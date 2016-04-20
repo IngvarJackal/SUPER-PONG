@@ -14,7 +14,7 @@ public class Run {
         while (true) {
             System.out.println("sending response...");
             System.out.println(manager.getInputs());
-            manager.sendState(new State());
+            manager.sendState(new State(ms, plApos, plBpos, state, balls));
             Thread.sleep(1000);
         }
     }

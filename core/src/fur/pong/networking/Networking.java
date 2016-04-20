@@ -13,7 +13,7 @@ public class Networking implements Closeable {
     private final int port;
 
     public Networking(String ip, int port) throws SocketException, UnknownHostException {
-        ipAddress = Inet6Address.getByName(ip);
+        ipAddress = InetAddress.getByName(ip);
         this.port = port;
     }
 
@@ -22,6 +22,7 @@ public class Networking implements Closeable {
         socket.send(new DatagramPacket(data, data.length, ipAddress, port));
     }
 
+    @SuppressWarnings("unchecked")
     public <T> T recieveObject() {
         byte[] recieve = new byte[50000];
         Object recObj = null;

@@ -23,7 +23,8 @@ public class KeyListener implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
-        lastChar = character;
+        if (character >= 32 && character <= 127) // only printable ascii chars
+            lastChar = character;
         return false;
     }
 
