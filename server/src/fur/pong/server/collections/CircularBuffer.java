@@ -47,18 +47,15 @@ public class CircularBuffer<T> {
         return null;
     }
 
-    /*
-     *  Can't set historical values
-     */
     public void set(T obj, int index) {
-        assert index >= 0;
+        assert index >= getAvalHist();
         assert index < arrLen;
-        if (index > len) { // clear part after len
+        if (index > len) { // allocate part between len and new index
             for (int i = len; i < index; i++)
-                array[(i+begin) % arrLen] = null;
+                array[(i + begin) % arrLen] = null;
         }
-        len = Math.max(index+1, len);
-        array[(index+begin) % arrLen] =  obj;
+        len = Math.max(index + 1, len);
+        array[(index + begin + arrLen) % arrLen] = obj;
     }
 
     public void shift(int pos) {
@@ -81,5 +78,19 @@ public class CircularBuffer<T> {
         }
         b.append("]");
         return b.toString();
+    }
+
+    public static void a() {
+        CircularBuffer<String> aa = new CircularBuffer<>(String.class, 10);
+        aa.array[2] = "2"; aa.array[3] = "3"; aa.array[8] = "8"; aa.array[9] = "9";
+        aa.begin = 3;
+        aa.len = 7;
+        System.out.println(aa);
+        System.out.println(aa.getNearest(2));
+        System.out.println(aa.getNearest(3));
+        System.out.println(aa.getNearest(-3));
+        aa.set("-2", -2);
+        System.out.println(aa.getNearest(-3));
+        System.out.println(aa);
     }
 }
