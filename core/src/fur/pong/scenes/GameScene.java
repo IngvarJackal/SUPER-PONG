@@ -44,6 +44,8 @@ public class GameScene implements Scene {
         this.curPlayer = curPlayer;
     }
 
+    int time = 0;
+
 
     // if returns 'true' then exit
     private boolean lazyInit() {
@@ -63,6 +65,7 @@ public class GameScene implements Scene {
 
     @Override
     public Scene workAndGetScene() {
+        time += Gdx.graphics.getDeltaTime()*1000;
         if (lazyInit()) {
             return new ExitScene();
         }
@@ -78,7 +81,7 @@ public class GameScene implements Scene {
         }
 
         System.out.println(networkManager.getStates());
-        networkManager.sendInput(new fur.pong.common.msg.Input());
+        networkManager.sendInput(new fur.pong.common.msg.Input(time, SharedState.keyListener.getChar()));
 
         return this;
     }
@@ -96,7 +99,7 @@ public class GameScene implements Scene {
         }
         for (Ball ball: gameState.balls) {
             shapeRenderer.setColor(Color.WHITE);
-            shapeRenderer.circle(ball.position.x, ball.position.y+cameraShift, ball.RADIUS);
+            shapeRenderer.circle(ball.position.x, ball.position.y+cameraShift, Ball.RADIUS);
         }
         shapeRenderer.end();
 

@@ -1,6 +1,7 @@
 package fur.pong.common.msg;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class State implements Serializable {
     long serialVersionUID = 0L;
@@ -20,11 +21,23 @@ public class State implements Serializable {
     public final byte state;
     public final Ball[] balls;
 
-    public State(int ms, int plApos, int plBpos, byte state, Ball[] balls) {
+    public State(int ms, int plApos, int plBpos, int state, Ball[] balls) {
         this.ms = ms;
         this.plApos = plApos;
         this.plBpos = plBpos;
-        this.state = state;
+        this.state = (byte)state;
         this.balls = balls;
+    }
+
+    @Override
+    public String toString() {
+        return "State{" +
+                "serialVersionUID=" + serialVersionUID +
+                ", ms=" + ms +
+                ", plApos=" + plApos +
+                ", plBpos=" + plBpos +
+                ", state=" + state +
+                ", balls=" + Arrays.toString(balls) +
+                '}';
     }
 }

@@ -11,6 +11,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class NetworkManager implements Closeable {
@@ -27,8 +28,10 @@ public class NetworkManager implements Closeable {
                 if (Thread.interrupted())
                     return;
                 WrappedMsg<Input> msg = networkingService.recieveObject();
-                clientQueues.computeIfAbsent(msg.ipPort, (dontcare) -> new ConcurrentLinkedQueue<>());
-                clientQueues.get(msg.ipPort).add(msg.payload);
+                if (clientQueues.size() < 2) // only first 2 clients allowed
+                    clientQueues.computeIfAbsent(msg.ipPort, (dontcare) -> new ConcurrentLinkedQueue<>());
+                if (clientQueues.get(msg.ipPort) != null)
+                    clientQueues.get(msg.ipPort).add(msg.payload);
             }
         });
     }
@@ -36,6 +39,10 @@ public class NetworkManager implements Closeable {
     public NetworkManager start() {
         inThread.start();
         return this;
+    }
+
+    public IpPort[] getPlayers() {
+        return clientQueues.keySet().toArray(new IpPort[clientQueues.size()]);
     }
 
     public List<Input> getInputs(IpPort ipPort) {

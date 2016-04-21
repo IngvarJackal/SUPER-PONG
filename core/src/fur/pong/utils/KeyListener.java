@@ -11,6 +11,11 @@ public class KeyListener implements InputProcessor {
     }
     char lastChar = '\0';
 
+    char c;
+    public char getChar() {
+        return c;
+    }
+
     @Override
     public boolean keyDown(int keycode) {
         return false;
@@ -23,6 +28,7 @@ public class KeyListener implements InputProcessor {
 
     @Override
     public boolean keyTyped(char character) {
+        c = character;
         if (character >= 32 && character <= 127) // only printable ascii chars
             lastChar = character;
         return false;

@@ -15,4 +15,15 @@ public class Ball implements Serializable {
         this.xVel = xVel;
         this.yVel = yVel;
     }
+
+    @Override
+    public String toString() {
+        return "Ball{" +
+                "serialVersionUID=" + serialVersionUID +
+                ", x=" + x +
+                ", y=" + y +
+                ", xVel=" + xVel +
+                ", yVel=" + yVel +
+                '}';
+    }
 }

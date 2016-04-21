@@ -16,4 +16,13 @@ public class Input implements Serializable {
         this.ms = ms;
         this.key = key;
     }
+
+    @Override
+    public String toString() {
+        return "Input{" +
+                "serialVersionUID=" + serialVersionUID +
+                ", ms=" + ms +
+                ", key=" + key +
+                '}';
+    }
 }

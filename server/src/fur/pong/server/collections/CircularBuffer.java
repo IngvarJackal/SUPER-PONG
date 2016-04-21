@@ -47,18 +47,42 @@ public class CircularBuffer<T> {
         return null;
     }
 
-    public void set(T obj, int index) {
+    public T getEarlier(int pos) {
+        T e = get(pos);
+        if (e != null)
+            return e;
+        int j = pos-1;
+        while (j >= getAvalHist()) {
+            if (j >= getAvalHist()) {
+                e = get(j--);
+                if (e != null)
+                    return e;
+            }
+        }
+        return null;
+    }
+
+    /*
+        returns amount of allocated memory
+     */
+    public int set(T obj, int index) {
         assert index >= getAvalHist();
         assert index < arrLen;
+        int allocated = 0;
         if (index > len) { // allocate part between len and new index
-            for (int i = len; i < index; i++)
+            for (int i = len; i < index; i++) {
                 array[(i + begin) % arrLen] = null;
+                allocated++;
+            }
         }
         len = Math.max(index + 1, len);
         array[(index + begin + arrLen) % arrLen] = obj;
+        return allocated;
     }
 
     public void shift(int pos) {
+        assert pos <= arrLen;
+        assert pos >= getAvalHist();
         begin = (pos+begin) % arrLen;
         len = Math.max(0, len-pos);
     }

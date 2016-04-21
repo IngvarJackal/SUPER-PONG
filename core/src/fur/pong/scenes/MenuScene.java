@@ -46,7 +46,7 @@ public class MenuScene implements Scene {
 
     public MenuScene(SpriteBatch batch) {
         this.batch = batch;
-    };
+    }
 
     @Override
     public Scene workAndGetScene() {
