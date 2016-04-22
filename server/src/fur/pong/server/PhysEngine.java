@@ -47,15 +47,15 @@ public class PhysEngine {
             tuple.setX(input);
         else
             tuple.setY(input);
-        int shift = inputs.set(tuple, inputTime);
-        if (shift > 0) {
-            state.shift(shift);
-            beginBucket += shift;
-        }
+        int lenBefore = inputs.getLen();
+        inputs.set(tuple, inputTime);
+        int lenDelta = inputs.getLen() - lenBefore;
+        inputs.shift(lenDelta);
+        beginBucket += lenDelta;
     }
 
     public int getStartTime() {
-        return bTm(0);
+        return beginBucket*STEP;
     }
 
     private int bTm(int bucket) {
@@ -64,5 +64,14 @@ public class PhysEngine {
 
     private int mTb(int bucket) {
         return bucket/STEP - beginBucket;
+    }
+
+    @Override
+    public String toString() {
+        return "beginBucket=" + beginBucket + "(" + bTm(beginBucket) + ")\nState: " + state + "\nInputs: " + inputs;
+    }
+
+    public String toStringState() {
+        return "beginBucket=" + beginBucket + "(" + bTm(beginBucket) + ") State: " + state.toStringState() + " Inputs: " + inputs.toStringState();
     }
 }

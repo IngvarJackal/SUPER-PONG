@@ -15,7 +15,7 @@ public class CircularBuffer<T> {
     }
 
     public T get(int pos) {
-        assert pos < getLen();
+        assert pos < arrLen;
         assert pos >= getAvalHist();
         return array[(pos + begin + arrLen) % arrLen];
     }
@@ -68,23 +68,24 @@ public class CircularBuffer<T> {
     public int set(T obj, int index) {
         assert index >= getAvalHist();
         assert index < arrLen;
-        int allocated = 0;
-        if (index > len) { // allocate part between len and new index
-            for (int i = len; i < index; i++) {
+        int allocated = index - getLen();
+        if (index > getLen()) { // allocate part between len and new index
+            for (int i = getLen(); i < index; i++) {
                 array[(i + begin) % arrLen] = null;
-                allocated++;
             }
         }
-        len = Math.max(index + 1, len);
+        len = Math.min(Math.max(index + 1, getLen()), arrLen);
         array[(index + begin + arrLen) % arrLen] = obj;
-        return allocated;
+        return Math.max(allocated, 0);
     }
 
     public void shift(int pos) {
+        if (pos == 0)
+            return;
         assert pos <= arrLen;
         assert pos >= getAvalHist();
         begin = (pos+begin) % arrLen;
-        len = Math.max(0, len-pos);
+        len = Math.max(0, getLen()-pos);
     }
 
     @Override
@@ -96,11 +97,15 @@ public class CircularBuffer<T> {
             b.append(" ");
         }
         b.append("| ");
-        for (int i = 0; i < len; i++) {
+        for (int i = 0; i < getLen(); i++) {
             b.append(get(i));
             b.append(" ");
         }
         b.append("]");
         return b.toString();
+    }
+
+    public String toStringState() {
+        return "l=" + getLen() + " h=" + getAvalHist() + " b=" + begin;
     }
 }

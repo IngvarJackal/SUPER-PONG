@@ -23,14 +23,13 @@ public class Run {
                 Thread.sleep(100);
             else {
                 List<Input> in = manager.getInputs(players[0]);
-                System.out.println(in);
                 physEngine.setInputs(in, true);
                 if (i % 1000 == 0) {
                     manager.sendState(physEngine.compute(physEngine.getStartTime()), players[0]);
                 }
+                System.out.println(physEngine.toStringState());
                 Thread.sleep(5);
             }
-            Thread.yield();
         }
     }
 }
